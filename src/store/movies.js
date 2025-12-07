@@ -13,11 +13,21 @@ export const moviesSlice = createSlice({
     ],
   },
   reducers: {
-    setMovies: (state, action) => {
-      state.movies = action.payload;
+    // adding movie dynamically
+    // addMovie: (state) => {
+    //   const newMovie = { id: 3, title: "Imong Mama" };
+    //   state.list = [...state.list, newMovie];
+    // },
+
+    addMovie: (state, action) => {
+      const newId = state.list.length
+        ? state.list[state.list.length - 1].id + 1
+        : 1;
+      action.payload = { id: newId, title: action.payload };
+      state.list = [...state.list, action.payload];
     },
   },
 });
-export const { setMovies } = moviesSlice.actions;
+export const { addMovie } = moviesSlice.actions;
 
 export default moviesSlice.reducer;
