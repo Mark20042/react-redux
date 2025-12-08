@@ -7,14 +7,18 @@ const api = axios.create({
 
 export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
-  async (obj, { rejectWithValue }) => {
+  async (obj, { rejectWithValue, fulfillWithValue }) => {
     // can get access to another reducer here
     // thunkAPI.dispatch(testAsyncDispatch());
     // console.log(thunkAPI.getState());
 
     try {
-      const response = await api.get("/users");
-      return response.data;
+      const response = await api.get("/userssad");
+
+      // can dispatch another action
+      return fulfillWithValue(response.data);
+
+      // return response.data
     } catch (error) {
       return rejectWithValue("Cant find users");
     }
@@ -23,10 +27,13 @@ export const fetchUsers = createAsyncThunk(
 
 export const fetchOneUser = createAsyncThunk(
   "users/fetchOneUser",
-  async (obj, { rejectWithValue }) => {
+  async (obj, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response = await api.get(`/users/${obj.id}`);
-      return response.data;
+      // can dispatch another action
+      return fulfillWithValue(response.data);
+
+      // return response.data
     } catch (error) {
       return rejectWithValue("Cant find this user");
     }
@@ -66,6 +73,7 @@ export const usersSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.message = action.payload;
         state.users = action.payload;
         state.status = "succeeded";
       })
