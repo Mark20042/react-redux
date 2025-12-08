@@ -15,8 +15,14 @@ const App = () => {
 
   // Fetch users when the component mounts
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers())
+      // use to get the error message from the API need to unwrap it
+      .unwrap()
+      // use to get the response
+      .then((response) => console.log(response))
+      // use to get the error message
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleAddMovie = () => {
     dispatch(addMovie(movie));
@@ -35,8 +41,9 @@ const App = () => {
     dispatch(fetchOneUser({ id: 12 }));
   };
 
-  console.log(user);
-  console.log(movies);
+  // console.log(user);
+  // console.log(movies);
+
   return (
     <div>
       <h1>Movie List</h1>
