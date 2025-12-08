@@ -1,15 +1,22 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addMovie } from "./store/movies";
-import { setType } from "./store/users";
-import { useState } from "react";
+import { setType, fetchUsers, fetchOneUser } from "./store/users";
+import { useState, useEffect } from "react";
 const App = () => {
   const [types, setTypes] = useState([]);
   const [movie, setMovie] = useState([]);
   // Access movies from the Redux store
   const movies = useSelector((state) => state.movies.list);
   const user = useSelector((state) => state.users);
+  const oneUser = useSelector((state) => state.users.oneUser);
+  const error = useSelector((state) => state.users.error);
   // Get the dispatch function to dispatch actions
   const dispatch = useDispatch();
+
+  // Fetch users when the component mounts
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const handleAddMovie = () => {
     dispatch(addMovie(movie));
@@ -19,6 +26,16 @@ const App = () => {
     dispatch(setType(types));
   };
 
+  // Function to get users using the fetchUsers action
+  const handlegetUsers = () => {
+    dispatch(fetchUsers());
+  };
+
+  const handlegetOneUser = () => {
+    dispatch(fetchOneUser({ id: 12 }));
+  };
+
+  console.log(user);
   console.log(movies);
   return (
     <div>
@@ -45,6 +62,24 @@ const App = () => {
       />
 
       <button onClick={handleSetType}>Set User Type</button>
+
+      <button onClick={handlegetUsers}>Get Users</button>
+      <br />
+      <br />
+      <span style={{ color: "blue" }}>{user.status}</span>
+      <br />
+      <br />
+      <ul>
+        {user.users ? (
+          user.users.map((user) => <li key={user.id}>{user.name}</li>)
+        ) : (
+          <li>No users</li>
+        )}
+      </ul>
+      <br />
+      <br />
+      <button onClick={handlegetOneUser}>Get One User</button>
+      {oneUser ? <h2>{oneUser.name}</h2> : <h2>{error}</h2>}
     </div>
   );
 };
