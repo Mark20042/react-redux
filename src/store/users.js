@@ -13,7 +13,7 @@ export const fetchUsers = createAsyncThunk(
     // console.log(thunkAPI.getState());
 
     try {
-      const response = await api.get("/userssad");
+      const response = await api.get("/users");
 
       // can dispatch another action
       return fulfillWithValue(response.data);
